@@ -1,0 +1,1244 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+src/
+  app/
+    auth/
+      login/
+        page.tsx
+      register/
+        page.tsx
+    product/
+      [id]/
+        page.tsx
+    search/
+      page.tsx
+    globals.css
+    layout.tsx
+    page.tsx
+  components/
+    Button.tsx
+    Footer.tsx
+    Input.tsx
+    Navbar.tsx
+  features/
+    auth/
+      LoginForm.tsx
+      RegisterForm.tsx
+    home/
+      Categories.tsx
+      Hero.tsx
+    product/
+      ProductCard.tsx
+      ProductDetail.tsx
+    search/
+      Filters.tsx
+      SearchBar.tsx
+      SearchResults.tsx
+  hooks/
+    useDebounce.ts
+    useSearch.ts
+  lib/
+    utils.ts
+  services/
+    api.ts
+  types/
+    index.ts
+.gitignore
+next-env.d.ts
+next.config.mjs
+package.json
+postcss.config.js
+tailwind.config.ts
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="src/app/auth/login/page.tsx">
+import LoginForm from '@/features/auth/LoginForm';
+
+export default function LoginPage() {
+  return (
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <LoginForm />
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/auth/register/page.tsx">
+import RegisterForm from '@/features/auth/RegisterForm';
+
+export default function RegisterPage() {
+  return (
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <RegisterForm />
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/product/[id]/page.tsx">
+import ProductDetail from '@/features/product/ProductDetail';
+import { api } from '@/services/api';
+import { Product } from '@/types';
+import Link from 'next/link';
+import { ChevronLeft } from 'lucide-react';
+
+async function getProduct(id: string): Promise<Product | null> {
+  try {
+    const product = await api.get(`/productos/${id}`);
+    return product;
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    return null;
+  }
+}
+
+export default async function ProductPage({ params }: { params: { id: string } }) {
+  const product = await getProduct(params.id);
+
+  if (!product) {
+    return (
+      <div className="min-h-[50vh] flex flex-col items-center justify-center text-center px-4">
+        <h1 className="text-3xl font-bold text-white mb-4">Producto no encontrado</h1>
+        <p className="text-neutral-400 mb-8">El producto que buscas no existe o ha sido removido.</p>
+        <Link href="/search" className="text-primary hover:underline flex items-center">
+          <ChevronLeft className="h-4 w-4 mr-1" /> Volver a buscar
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mb-8">
+        <Link href="/search" className="text-neutral-400 hover:text-white flex items-center w-fit">
+          <ChevronLeft className="h-5 w-5 mr-1" /> Volver a resultados
+        </Link>
+      </div>
+      <ProductDetail product={product} />
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/search/page.tsx">
+"use client";
+
+import SearchBar from '@/features/search/SearchBar';
+import Filters from '@/features/search/Filters';
+import SearchResults from '@/features/search/SearchResults';
+import { useSearch } from '@/hooks/useSearch';
+import { Suspense } from 'react';
+
+function SearchContent() {
+  const { query, setQuery, results, loading } = useSearch();
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="flex flex-col items-center mb-8">
+        <h1 className="text-3xl font-bold text-white mb-6">Búsqueda de Autopartes</h1>
+        <SearchBar value={query} onChange={(e) => setQuery(e.target.value)} />
+      </div>
+      
+      <div className="flex flex-col md:flex-row gap-8">
+        <aside className="w-full md:w-64 flex-shrink-0">
+          <Filters />
+        </aside>
+        <main className="flex-grow">
+          <SearchResults results={results} loading={loading} />
+        </main>
+      </div>
+    </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-white">Cargando buscador...</div>}>
+      <SearchContent />
+    </Suspense>
+  );
+}
+</file>
+
+<file path="src/app/globals.css">
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground: #ffffff;
+  --background: #111111;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+</file>
+
+<file path="src/app/layout.tsx">
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "YonkeApp - Inventario de Autopartes",
+  description: "Encuentra las mejores piezas para tu auto",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="es">
+      <body className={inter.className}>
+        <Navbar />
+        <main className="min-h-screen bg-neutral-950 text-white">{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
+}
+</file>
+
+<file path="src/app/page.tsx">
+import Hero from '@/features/home/Hero';
+import Categories from '@/features/home/Categories';
+import ProductCard from '@/features/product/ProductCard';
+import { Product } from '@/types';
+import { api } from '@/services/api';
+
+async function getFeaturedProducts(): Promise<Product[]> {
+  try {
+    const products = await api.get('/productos?limit=4');
+    return products.slice(0, 4); // Por si el backend no respeta el límite temporalmente
+  } catch (error) {
+    console.error('Error fetching featured products:', error);
+    return [];
+  }
+}
+
+export default async function Home() {
+  const products = await getFeaturedProducts();
+
+  return (
+    <div>
+      <Hero />
+      <Categories />
+      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-white mb-8">Productos Destacados</h2>
+        {products.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-neutral-400">No hay productos destacados disponibles por el momento.</p>
+        )}
+      </section>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/Button.tsx">
+import React from 'react';
+import { classNames } from '@/lib/utils';
+
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'outline';
+}
+
+export default function Button({ className, variant = 'primary', ...props }: ButtonProps) {
+  const baseStyle = "px-4 py-2 rounded-md font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:ring-primary";
+  const variants = {
+    primary: "bg-primary text-white hover:bg-red-600",
+    secondary: "bg-neutral-800 text-white hover:bg-neutral-700",
+    outline: "border border-neutral-700 text-neutral-300 hover:bg-neutral-800"
+  };
+  
+  return (
+    <button className={classNames(baseStyle, variants[variant], className)} {...props} />
+  );
+}
+</file>
+
+<file path="src/components/Footer.tsx">
+export default function Footer() {
+  return (
+    <footer className="bg-neutral-950 border-t border-neutral-800 py-8 mt-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-400">
+        <p>&copy; {new Date().getFullYear()} YonkeApp. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+  );
+}
+</file>
+
+<file path="src/components/Input.tsx">
+import React from 'react';
+import { classNames } from '@/lib/utils';
+
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+
+export default function Input({ className, ...props }: InputProps) {
+  return (
+    <input 
+      className={classNames(
+        "w-full bg-neutral-800 border border-neutral-700 rounded-md px-4 py-2 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
+        className
+      )} 
+      {...props} 
+    />
+  );
+}
+</file>
+
+<file path="src/components/Navbar.tsx">
+import Link from 'next/link';
+import { Search, User } from 'lucide-react';
+
+export default function Navbar() {
+  return (
+    <nav className="sticky top-0 z-50 bg-neutral-950/80 backdrop-blur-md border-b border-neutral-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex-shrink-0">
+            <Link href="/" className="text-2xl font-bold text-primary">Yonke<span className="text-white">App</span></Link>
+          </div>
+          <div className="flex items-center space-x-4">
+            <Link href="/search" className="text-neutral-300 hover:text-white p-2">
+              <Search className="h-5 w-5" />
+            </Link>
+
+            <Link href="/auth/login" className="text-neutral-300 hover:text-white p-2">
+              <User className="h-5 w-5" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}
+</file>
+
+<file path="src/features/auth/LoginForm.tsx">
+"use client";
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import Input from '@/components/Input';
+import Button from '@/components/Button';
+import { useRouter } from 'next/navigation';
+
+export default function LoginForm() {
+  const [usuario, setUsuario] = useState('');
+  const [contrasena, setContrasena] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('http://localhost:3001/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify({
+          usuario,
+          contrasena
+        }),
+      });
+
+      const data = await response.json();
+
+      // 🔥 DEBUG IMPORTANTE (temporal)
+      console.log('LOGIN RESPONSE:', data);
+
+      if (!response.ok) {
+        throw new Error(data.error || data.detail || 'Error al iniciar sesión');
+      }
+
+      // Guardar usuario logueado
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      router.push('/dashboard');
+
+    } catch (err: any) {
+      console.error('LOGIN ERROR:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="bg-neutral-900 border border-neutral-800 p-8 rounded-xl w-full max-w-md mx-auto">
+
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-white">Inicio de Sesión YONQUE</h2>
+        <p className="text-neutral-400 mt-2">
+          Ingresa tus credenciales
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+
+        {error && (
+          <div className="bg-red-500/10 border border-red-500 text-red-500 p-3 rounded-lg text-sm text-center">
+            {error}
+          </div>
+        )}
+
+        <div>
+          <label className="block text-sm font-medium text-neutral-300 mb-2">
+            Usuario
+          </label>
+
+          <Input
+            type="text"
+            placeholder="Usuario"
+            value={usuario}
+            onChange={(e) => setUsuario(e.target.value)}
+            required
+            disabled={loading}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-neutral-300 mb-2">
+            Contraseña
+          </label>
+
+          <Input
+            type="password"
+            placeholder="••••••••"
+            value={contrasena}
+            onChange={(e) => setContrasena(e.target.value)}
+            required
+            disabled={loading}
+          />
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full text-lg py-3"
+          disabled={loading}
+        >
+          {loading ? 'Cargando...' : 'Iniciar Sesión'}
+        </Button>
+      </form>
+
+      <div className="mt-6 text-center text-sm text-neutral-400">
+        ¿No tienes cuenta?{' '}
+        <Link href="/auth/register" className="text-primary hover:underline font-medium">
+          Regístrate aquí
+        </Link>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/features/auth/RegisterForm.tsx">
+"use client";
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import Input from '@/components/Input';
+import Button from '@/components/Button';
+
+export default function RegisterForm() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [formData, setFormData] = useState({
+    correo: '',
+    contrasena: '', // ✔ backend correcto
+    usuario: '',
+    calle: '',
+    numero: '',
+    colonia: '',
+    codigo_postal: '',
+    ciudad: '',
+    estado: '',
+    referencia: ''
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('http://localhost:3001/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      console.log('STATUS:', response.status);
+      console.log('BACKEND RESPONSE:', data);
+
+      if (!response.ok) {
+        throw new Error(
+          data.error || data.detail || 'Error al crear la cuenta'
+        );
+      }
+
+      alert("¡Cuenta creada con éxito!");
+      router.push('/auth/login');
+
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="bg-neutral-900 border border-neutral-800 p-8 rounded-xl w-full max-w-3xl mx-auto">
+
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-white">Registro de YONQUE</h2>
+        <p className="text-neutral-400 mt-2">
+          Crea una cuenta para ofrecer tus autopartes
+        </p>
+      </div>
+
+      {error && (
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500 text-red-500 rounded-lg text-sm text-center">
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-8">
+
+        {/* Datos de Cuenta */}
+        <section>
+          <h3 className="text-lg font-semibold text-primary mb-4 border-b border-neutral-800 pb-2">
+            Datos de la Cuenta
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            {/* Usuario */}
+            <div>
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
+                Usuario
+              </label>
+              <Input
+                name="usuario"
+                type="text"
+                value={formData.usuario}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
+            </div>
+
+            {/* Correo */}
+            <div>
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
+                Correo Electrónico
+              </label>
+              <Input
+                name="correo"
+                type="email"
+                value={formData.correo}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
+            </div>
+
+            {/* CONTRASEÑA (FIX IMPORTANTE) */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
+                Contraseña
+              </label>
+              <Input
+                name="contrasena"   // ✔ FIX AQUÍ (antes estaba "contraseña")
+                type="password"
+                value={formData.contrasena}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
+            </div>
+
+          </div>
+        </section>
+
+        {/* Ubicación (SIN CAMBIOS) */}
+        <section>
+          <h3 className="text-lg font-semibold text-primary mb-4 border-b border-neutral-800 pb-2">
+            Ubicación del Yonque
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div className="md:col-span-2 flex gap-4">
+
+              <div className="flex-grow">
+                <label className="block text-sm font-medium text-neutral-300 mb-2">
+                  Calle
+                </label>
+                <Input
+                  name="calle"
+                  type="text"
+                  value={formData.calle}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                />
+              </div>
+
+              <div className="w-32 flex-shrink-0">
+                <label className="block text-sm font-medium text-neutral-300 mb-2">
+                  Número
+                </label>
+                <Input
+                  name="numero"
+                  type="text"
+                  value={formData.numero}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                />
+              </div>
+
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
+                Colonia
+              </label>
+              <Input
+                name="colonia"
+                type="text"
+                value={formData.colonia}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
+                Código Postal
+              </label>
+              <Input
+                name="codigo_postal"
+                type="text"
+                value={formData.codigo_postal}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
+                Ciudad
+              </label>
+              <Input
+                name="ciudad"
+                type="text"
+                value={formData.ciudad}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
+                Estado
+              </label>
+              <Input
+                name="estado"
+                type="text"
+                value={formData.estado}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
+                Referencia
+              </label>
+              <Input
+                name="referencia"
+                type="text"
+                value={formData.referencia}
+                onChange={handleChange}
+                disabled={loading}
+              />
+            </div>
+
+          </div>
+        </section>
+
+        <Button
+          type="submit"
+          className="w-full text-lg py-3 mt-4"
+          disabled={loading}
+        >
+          {loading ? 'Creando cuenta...' : 'Crear Cuenta de Yonque'}
+        </Button>
+      </form>
+
+      <div className="mt-6 text-center text-sm text-neutral-400">
+        ¿Ya tienes una cuenta?{' '}
+        <Link href="/auth/login" className="text-primary hover:underline font-medium">
+          Inicia sesión aquí
+        </Link>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/features/home/Categories.tsx">
+import Link from 'next/link';
+import { Settings, Droplet, Zap, Car } from 'lucide-react';
+
+const categories = [
+  { name: 'Motor', icon: Settings, href: '/search?category=motor' },
+  { name: 'Transmisión', icon: Car, href: '/search?category=transmision' },
+  { name: 'Suspensión', icon: Droplet, href: '/search?category=suspension' },
+  { name: 'Eléctrico', icon: Zap, href: '/search?category=electrico' },
+];
+
+export default function Categories() {
+  return (
+    <section className="py-12 bg-neutral-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-extrabold text-white mb-8 text-center">Explorar por Categoría</h2>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {categories.map((category) => (
+            <Link key={category.name} href={category.href} className="flex flex-col items-center p-6 bg-neutral-800 rounded-lg border border-neutral-700 hover:border-primary transition-colors">
+              <category.icon className="h-10 w-10 text-primary mb-3" />
+              <span className="text-white font-medium">{category.name}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/features/home/Hero.tsx">
+import Link from 'next/link';
+import Button from '@/components/Button';
+
+export default function Hero() {
+  return (
+    <div className="relative bg-neutral-950 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+        <div className="text-center">
+          <h1 className="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl">
+            Encuentra las mejores piezas
+            <span className="block text-primary">para tu vehículo</span>
+          </h1>
+          <p className="mt-3 max-w-md mx-auto text-base text-neutral-400 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+            El inventario más grande de autopartes usadas y reconstruidas, con garantía de calidad.
+          </p>
+          <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+            <div className="rounded-md shadow">
+              <Link href="/search">
+                <Button className="w-full text-lg px-8 py-3">Buscar piezas</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/features/product/ProductCard.tsx">
+import Link from 'next/link';
+import { Product } from '@/types';
+import { formatCurrency } from '@/lib/utils';
+import Button from '@/components/Button';
+
+export default function ProductCard({ product }: { product: Product }) {
+  return (
+    <div className="bg-neutral-900 border border-neutral-800 rounded-lg overflow-hidden flex flex-col hover:border-primary transition-colors duration-300">
+      <div className="aspect-video bg-neutral-800 relative">
+        {product.imagen ? (
+          <img src={product.imagen} alt={product.nombre} className="object-cover w-full h-full" />
+        ) : (
+          <div className="flex items-center justify-center w-full h-full text-neutral-500">
+            Sin imagen
+          </div>
+        )}
+      </div>
+      <div className="p-4 flex flex-col flex-grow">
+        <h3 className="text-lg font-semibold text-white mb-1 line-clamp-1">{product.nombre}</h3>
+        <p className="text-sm text-neutral-400 mb-2 line-clamp-2">{product.descripcion}</p>
+        <div className="mt-auto flex items-center justify-between">
+          <span className="text-xl font-bold text-primary">{formatCurrency(product.precio)}</span>
+          <Link href={`/product/${product.id}`}>
+            <Button variant="secondary" className="text-sm px-3 py-1.5">Ver detalles</Button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/features/product/ProductDetail.tsx">
+import { Product } from '@/types';
+import { formatCurrency } from '@/lib/utils';
+import Button from '@/components/Button';
+import { ShieldCheck } from 'lucide-react';
+
+export default function ProductDetail({ product }: { product: Product }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-neutral-900 rounded-xl p-8 border border-neutral-800">
+      <div className="aspect-square bg-neutral-800 rounded-lg overflow-hidden relative">
+        {product.imagen ? (
+          <img src={product.imagen} alt={product.nombre} className="object-cover w-full h-full" />
+        ) : (
+          <div className="flex items-center justify-center w-full h-full text-neutral-500 text-xl">
+            Sin imagen
+          </div>
+        )}
+      </div>
+      
+      <div className="flex flex-col">
+        <div className="mb-2">
+          <span className="inline-block px-3 py-1 bg-neutral-800 text-primary text-sm font-medium rounded-full mb-4">
+            {product.categoria}
+          </span>
+          <h1 className="text-3xl font-extrabold text-white mb-2">{product.nombre}</h1>
+          <p className="text-neutral-400 text-lg mb-6">{product.descripcion}</p>
+        </div>
+        
+        <div className="mb-8">
+          <span className="text-4xl font-bold text-primary">{formatCurrency(product.precio)}</span>
+          <span className="ml-2 text-neutral-500">MXN</span>
+        </div>
+        
+        <div className="space-y-4 mb-8 text-neutral-300">
+          <div className="flex items-center">
+            <ShieldCheck className="h-5 w-5 text-green-500 mr-3" />
+            <span>Garantía de funcionamiento de 30 días</span>
+          </div>
+        </div>
+
+        <div className="mt-auto pt-6 border-t border-neutral-800">
+
+          <p className="text-center text-sm text-neutral-500 mt-4">
+            Stock disponible: {product.stock} unidades
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/features/search/Filters.tsx">
+export default function Filters() {
+  return (
+    <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-4 space-y-6">
+      <div>
+        <h3 className="text-lg font-medium text-white mb-3">Categorías</h3>
+        <ul className="space-y-2">
+          {['Motor', 'Transmisión', 'Suspensión', 'Eléctrico', 'Interiores', 'Carrocería'].map((cat) => (
+            <li key={cat} className="flex items-center">
+              <input type="checkbox" className="h-4 w-4 text-primary bg-neutral-800 border-neutral-700 rounded focus:ring-primary focus:ring-offset-neutral-900" />
+              <label className="ml-2 text-sm text-neutral-300">{cat}</label>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 className="text-lg font-medium text-white mb-3">Rango de Precio</h3>
+        <div className="flex items-center space-x-2">
+          <input type="number" placeholder="Min" className="w-full bg-neutral-800 border border-neutral-700 rounded px-2 py-1 text-sm text-white" />
+          <span className="text-neutral-500">-</span>
+          <input type="number" placeholder="Max" className="w-full bg-neutral-800 border border-neutral-700 rounded px-2 py-1 text-sm text-white" />
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/features/search/SearchBar.tsx">
+import React from 'react';
+import { Search } from 'lucide-react';
+import Input from '@/components/Input';
+
+interface SearchBarProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export default function SearchBar({ value, onChange }: SearchBarProps) {
+  return (
+    <div className="relative max-w-2xl w-full">
+      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <Search className="h-5 w-5 text-neutral-400" />
+      </div>
+      <Input
+        type="text"
+        placeholder="Buscar por pieza, marca, modelo o año..."
+        className="pl-10 py-3 text-lg"
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  );
+}
+</file>
+
+<file path="src/features/search/SearchResults.tsx">
+import ProductCard from '@/features/product/ProductCard';
+import { Product } from '@/types';
+
+interface SearchResultsProps {
+  results: Product[];
+  loading: boolean;
+}
+
+export default function SearchResults({ results, loading }: SearchResultsProps) {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div key={i} className="animate-pulse bg-neutral-900 rounded-lg h-80"></div>
+        ))}
+      </div>
+    );
+  }
+
+  if (results.length === 0) {
+    return (
+      <div className="text-center py-12 text-neutral-400">
+        <p className="text-xl">No se encontraron resultados para tu búsqueda.</p>
+        <p className="mt-2">Intenta con otros términos o ajusta los filtros.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {results.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  );
+}
+</file>
+
+<file path="src/hooks/useDebounce.ts">
+import { useState, useEffect } from 'react';
+
+export function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+  return debouncedValue;
+}
+</file>
+
+<file path="src/hooks/useSearch.ts">
+import { useState, useEffect } from 'react';
+import { api } from '@/services/api';
+import { Product } from '@/types';
+import { useDebounce } from './useDebounce';
+
+export function useSearch(initialQuery: string = '') {
+  const [query, setQuery] = useState(initialQuery);
+  const [results, setResults] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+  const debouncedQuery = useDebounce(query, 500);
+
+  useEffect(() => {
+    if (!debouncedQuery) {
+      setResults([]);
+      return;
+    }
+    const search = async () => {
+      setLoading(true);
+      try {
+        const data = await api.get(`/productos/buscar?q=${debouncedQuery}`);
+        setResults(data);
+      } catch (e) {
+        console.error(e);
+        setResults([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    search();
+  }, [debouncedQuery]);
+
+  return { query, setQuery, results, loading };
+}
+</file>
+
+<file path="src/lib/utils.ts">
+export function formatCurrency(amount: number) {
+  return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(amount);
+}
+
+export function classNames(...classes: (string | undefined | null | false)[]) {
+  return classes.filter(Boolean).join(' ');
+}
+</file>
+
+<file path="src/services/api.ts">
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
+export const api = {
+  get: async (endpoint: string) => {
+    const res = await fetch(`${API_URL}${endpoint}`);
+    if (!res.ok) throw new Error('Error en la petición get');
+    return res.json();
+  },
+  post: async (endpoint: string, body: any) => {
+    const res = await fetch(`${API_URL}${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error('Error en la petición post');
+    return res.json();
+  }
+};
+</file>
+
+<file path="src/types/index.ts">
+export interface Product {
+  id: string | number;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  categoria: string;
+  imagen?: string;
+  stock: number;
+  vehiculo_modelo?: string;
+  año?: number;
+}
+</file>
+
+<file path=".gitignore">
+node_modules/
+.DS_Store
+</file>
+
+<file path="next-env.d.ts">
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+import "./.next/dev/types/routes.d.ts";
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+</file>
+
+<file path="next.config.mjs">
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
+export default nextConfig;
+</file>
+
+<file path="package.json">
+{
+  "name": "yonke-app-next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.5.0",
+    "lucide-react": "^1.14.0",
+    "next": "^16.2.4",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "postcss": "^8.5.14",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5"
+  }
+}
+</file>
+
+<file path="postcss.config.js">
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+</file>
+
+<file path="tailwind.config.ts">
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: "#e53e3e",
+      },
+    },
+  },
+  plugins: [],
+};
+export default config;
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "target": "ES2017"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+</file>
+
+</files>
