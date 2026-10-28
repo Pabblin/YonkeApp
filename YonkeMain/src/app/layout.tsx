@@ -7,8 +7,9 @@ import Footer from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "YonkeApp - Inventario de Autopartes",
-  description: "Encuentra las mejores piezas para tu auto",
+  title: "YonkeApp - Autopartes Usadas y Reconstruidas",
+  description:
+    "El inventario más grande de autopartes usadas y reconstruidas, con garantía de calidad",
 };
 
 export default function RootLayout({
@@ -20,7 +21,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={inter.className}>
         <Navbar />
-        <main className="min-h-screen bg-neutral-950 text-white">{children}</main>
+        <main className="min-h-screen">{children}</main>
         <Footer />
       </body>
     </html>

@@ -1,30 +1,40 @@
 import Link from 'next/link';
 import { Product } from '@/types';
 import { formatCurrency } from '@/lib/utils';
-import Button from '@/components/Button';
 
 export default function ProductCard({ product }: { product: Product }) {
   return (
-    <div className="bg-neutral-900 border border-neutral-800 rounded-lg overflow-hidden flex flex-col hover:border-primary transition-colors duration-300">
-      <div className="aspect-video bg-neutral-800 relative">
+    <Link
+      href={`/product/${product.id}`}
+      className="group block bg-surface transition-transform duration-200 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-ground outline-none"
+    >
+      {/* Image */}
+      <div className="aspect-[4/3] bg-field relative overflow-hidden">
         {product.imagen ? (
-          <img src={product.imagen} alt={product.nombre} className="object-cover w-full h-full" />
+          <img
+            src={product.imagen}
+            alt={product.nombre}
+            className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-[1.03]"
+          />
         ) : (
-          <div className="flex items-center justify-center w-full h-full text-neutral-500">
+          <div className="flex items-center justify-center w-full h-full text-ink-secondary">
             Sin imagen
           </div>
         )}
       </div>
-      <div className="p-4 flex flex-col flex-grow">
-        <h3 className="text-lg font-semibold text-white mb-1 line-clamp-1">{product.nombre}</h3>
-        <p className="text-sm text-neutral-400 mb-2 line-clamp-2">{product.descripcion}</p>
-        <div className="mt-auto flex items-center justify-between">
-          <span className="text-xl font-bold text-primary">{formatCurrency(product.precio)}</span>
-          <Link href={`/product/${product.id}`}>
-            <Button variant="secondary" className="text-sm px-3 py-1.5">Ver detalles</Button>
-          </Link>
-        </div>
+
+      {/* Info */}
+      <div className="p-5">
+        <h3 className="text-base font-semibold text-ink mb-1 line-clamp-1">
+          {product.nombre}
+        </h3>
+        <p className="text-sm text-ink-secondary mb-4 line-clamp-2">
+          {product.descripcion}
+        </p>
+        <span className="text-2xl font-extrabold text-accent">
+          {formatCurrency(product.precio)}
+        </span>
       </div>
-    </div>
+    </Link>
   );
 }

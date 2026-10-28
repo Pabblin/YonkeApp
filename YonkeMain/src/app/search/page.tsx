@@ -10,9 +10,11 @@ function SearchContent() {
   const { query, setQuery, results, loading } = useSearch();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex flex-col items-center mb-8">
-        <h1 className="text-3xl font-bold text-white mb-6">Búsqueda de Autopartes</h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mb-12">
+        <h1 className="text-3xl sm:text-4xl font-bold text-ink tracking-display leading-display mb-6">
+          Búsqueda de Autopartes
+        </h1>
         <SearchBar value={query} onChange={(e) => setQuery(e.target.value)} />
       </div>
       
@@ -30,7 +32,7 @@ function SearchContent() {
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-white">Cargando buscador...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-ink-secondary">Cargando buscador...</div>}>
       <SearchContent />
     </Suspense>
   );

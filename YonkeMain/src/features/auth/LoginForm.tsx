@@ -34,7 +34,7 @@ export default function LoginForm() {
 
       const data = await response.json();
 
-      // 🔥 DEBUG IMPORTANTE (temporal)
+      //  DEBUG IMPORTANTE (temporal)
       console.log('LOGIN RESPONSE:', data);
 
       if (!response.ok) {

@@ -10,9 +10,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        ground: "var(--ground)",
+        surface: "var(--surface)",
+        field: "var(--field)",
+        "border-subtle": "var(--border-subtle)",
+        ink: "var(--ink)",
+        "ink-secondary": "var(--ink-secondary)",
+        accent: "var(--accent)",
+        "accent-hover": "var(--accent-hover)",
+        "accent-soft": "var(--accent-soft)",
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: "#e53e3e",
+      },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+      },
+      letterSpacing: {
+        display: "-0.03em",
+      },
+      lineHeight: {
+        display: "0.95",
       },
     },
   },

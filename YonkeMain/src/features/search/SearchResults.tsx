@@ -11,7 +11,7 @@ export default function SearchResults({ results, loading }: SearchResultsProps) 
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="animate-pulse bg-neutral-900 rounded-lg h-80"></div>
+          <div key={i} className="animate-pulse bg-surface h-80"></div>
         ))}
       </div>
     );
@@ -19,9 +19,9 @@ export default function SearchResults({ results, loading }: SearchResultsProps) 
 
   if (results.length === 0) {
     return (
-      <div className="text-center py-12 text-neutral-400">
+      <div className="text-center py-16 text-ink-secondary">
         <p className="text-xl">No se encontraron resultados para tu búsqueda.</p>
-        <p className="mt-2">Intenta con otros términos o ajusta los filtros.</p>
+        <p className="mt-3">Intenta con otros términos o ajusta los filtros.</p>
       </div>
     );
   }

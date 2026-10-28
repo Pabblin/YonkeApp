@@ -1,21 +1,36 @@
 import Link from 'next/link';
-import { Search, User } from 'lucide-react';
 
 export default function Navbar() {
   return (
-    <nav className="sticky top-0 z-50 bg-neutral-950/80 backdrop-blur-md border-b border-neutral-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-50 bg-surface">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0">
-            <Link href="/" className="text-2xl font-bold text-primary">Yonke<span className="text-white">App</span></Link>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Link href="/search" className="text-neutral-300 hover:text-white p-2">
-              <Search className="h-5 w-5" />
-            </Link>
+          <Link
+            href="/"
+            className="text-2xl font-extrabold tracking-tight"
+          >
+            <span className="text-accent">Yonke</span>
+            <span className="text-ink">App</span>
+          </Link>
 
-            <Link href="/auth/login" className="text-neutral-300 hover:text-white p-2">
-              <User className="h-5 w-5" />
+          <div className="flex items-center gap-8">
+            <Link
+              href="/"
+              className="hidden sm:block text-sm font-medium text-ink-secondary hover:text-ink transition-colors duration-150"
+            >
+              Inicio
+            </Link>
+            <Link
+              href="/search"
+              className="text-sm font-medium text-ink-secondary hover:text-ink transition-colors duration-150"
+            >
+              Buscar piezas
+            </Link>
+            <Link
+              href="/auth/login"
+              className="bg-accent text-white px-5 py-2 text-sm font-medium hover:bg-accent-hover transition-colors duration-150"
+            >
+              Ingresar
             </Link>
           </div>
         </div>

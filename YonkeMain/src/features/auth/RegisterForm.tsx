@@ -69,26 +69,28 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="bg-neutral-900 border border-neutral-800 p-8 rounded-xl w-full max-w-3xl mx-auto">
+    <div className="bg-surface p-8 sm:p-10 w-full max-w-3xl mx-auto">
 
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-white">Registro de YONQUE</h2>
-        <p className="text-neutral-400 mt-2">
+      <div className="mb-10">
+        <h2 className="text-3xl font-bold text-ink tracking-display leading-display">
+          Registro de YONQUE
+        </h2>
+        <p className="text-ink-secondary mt-3">
           Crea una cuenta para ofrecer tus autopartes
         </p>
       </div>
 
       {error && (
-        <div className="mb-6 p-4 bg-red-500/10 border border-red-500 text-red-500 rounded-lg text-sm text-center">
+        <div className="mb-6 p-4 bg-accent-soft text-accent text-sm">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-10">
 
         {/* Datos de Cuenta */}
         <section>
-          <h3 className="text-lg font-semibold text-primary mb-4 border-b border-neutral-800 pb-2">
+          <h3 className="text-lg font-semibold text-accent mb-6">
             Datos de la Cuenta
           </h3>
 
@@ -96,7 +98,7 @@ export default function RegisterForm() {
 
             {/* Usuario */}
             <div>
-              <label className="block text-sm font-medium text-neutral-300 mb-2">
+              <label className="block text-sm font-medium text-ink-secondary mb-2">
                 Usuario
               </label>
               <Input
@@ -111,7 +113,7 @@ export default function RegisterForm() {
 
             {/* Correo */}
             <div>
-              <label className="block text-sm font-medium text-neutral-300 mb-2">
+              <label className="block text-sm font-medium text-ink-secondary mb-2">
                 Correo Electrónico
               </label>
               <Input
@@ -126,7 +128,7 @@ export default function RegisterForm() {
 
             {/* CONTRASEÑA (FIX IMPORTANTE) */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-neutral-300 mb-2">
+              <label className="block text-sm font-medium text-ink-secondary mb-2">
                 Contraseña
               </label>
               <Input
@@ -144,7 +146,7 @@ export default function RegisterForm() {
 
         {/* Ubicación (SIN CAMBIOS) */}
         <section>
-          <h3 className="text-lg font-semibold text-primary mb-4 border-b border-neutral-800 pb-2">
+          <h3 className="text-lg font-semibold text-accent mb-6">
             Ubicación del Yonque
           </h3>
 
@@ -153,7 +155,7 @@ export default function RegisterForm() {
             <div className="md:col-span-2 flex gap-4">
 
               <div className="flex-grow">
-                <label className="block text-sm font-medium text-neutral-300 mb-2">
+                <label className="block text-sm font-medium text-ink-secondary mb-2">
                   Calle
                 </label>
                 <Input
@@ -167,7 +169,7 @@ export default function RegisterForm() {
               </div>
 
               <div className="w-32 flex-shrink-0">
-                <label className="block text-sm font-medium text-neutral-300 mb-2">
+                <label className="block text-sm font-medium text-ink-secondary mb-2">
                   Número
                 </label>
                 <Input
@@ -183,7 +185,7 @@ export default function RegisterForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-300 mb-2">
+              <label className="block text-sm font-medium text-ink-secondary mb-2">
                 Colonia
               </label>
               <Input
@@ -197,7 +199,7 @@ export default function RegisterForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-300 mb-2">
+              <label className="block text-sm font-medium text-ink-secondary mb-2">
                 Código Postal
               </label>
               <Input
@@ -211,7 +213,7 @@ export default function RegisterForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-300 mb-2">
+              <label className="block text-sm font-medium text-ink-secondary mb-2">
                 Ciudad
               </label>
               <Input
@@ -225,7 +227,7 @@ export default function RegisterForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-300 mb-2">
+              <label className="block text-sm font-medium text-ink-secondary mb-2">
                 Estado
               </label>
               <Input
@@ -239,7 +241,7 @@ export default function RegisterForm() {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-neutral-300 mb-2">
+              <label className="block text-sm font-medium text-ink-secondary mb-2">
                 Referencia
               </label>
               <Input
@@ -263,9 +265,9 @@ export default function RegisterForm() {
         </Button>
       </form>
 
-      <div className="mt-6 text-center text-sm text-neutral-400">
+      <div className="mt-8 text-center text-sm text-ink-secondary">
         ¿Ya tienes una cuenta?{' '}
-        <Link href="/auth/login" className="text-primary hover:underline font-medium">
+        <Link href="/auth/login" className="text-accent hover:text-accent-hover font-medium">
           Inicia sesión aquí
         </Link>
       </div>

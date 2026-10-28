@@ -6,14 +6,18 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 export default function Button({ className, variant = 'primary', ...props }: ButtonProps) {
-  const baseStyle = "px-4 py-2 rounded-md font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:ring-primary";
+  const baseStyle =
+    "px-5 py-2.5 font-medium transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-ground disabled:opacity-50 disabled:cursor-not-allowed";
   const variants = {
-    primary: "bg-primary text-white hover:bg-red-600",
-    secondary: "bg-neutral-800 text-white hover:bg-neutral-700",
-    outline: "border border-neutral-700 text-neutral-300 hover:bg-neutral-800"
+    primary: "bg-accent text-white hover:bg-accent-hover",
+    secondary: "bg-surface text-ink hover:bg-field",
+    outline: "bg-transparent text-ink-secondary hover:text-ink",
   };
-  
+
   return (
-    <button className={classNames(baseStyle, variants[variant], className)} {...props} />
+    <button
+      className={classNames(baseStyle, variants[variant], className)}
+      {...props}
+    />
   );
 }

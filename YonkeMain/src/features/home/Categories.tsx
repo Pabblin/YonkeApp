@@ -1,26 +1,37 @@
 import Link from 'next/link';
-import { Settings, Droplet, Zap, Car } from 'lucide-react';
+import Reveal from '@/components/Reveal';
 
 const categories = [
-  { name: 'Motor', icon: Settings, href: '/search?category=motor' },
-  { name: 'Transmisión', icon: Car, href: '/search?category=transmision' },
-  { name: 'Suspensión', icon: Droplet, href: '/search?category=suspension' },
-  { name: 'Eléctrico', icon: Zap, href: '/search?category=electrico' },
+  { name: 'Motor', href: '/search?category=motor' },
+  { name: 'Transmisión', href: '/search?category=transmision' },
+  { name: 'Suspensión', href: '/search?category=suspension' },
+  { name: 'Eléctrico', href: '/search?category=electrico' },
+  { name: 'Interiores', href: '/search?category=interiores' },
+  { name: 'Carrocería', href: '/search?category=carroceria' },
 ];
 
 export default function Categories() {
   return (
-    <section className="py-12 bg-neutral-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-extrabold text-white mb-8 text-center">Explorar por Categoría</h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {categories.map((category) => (
-            <Link key={category.name} href={category.href} className="flex flex-col items-center p-6 bg-neutral-800 rounded-lg border border-neutral-700 hover:border-primary transition-colors">
-              <category.icon className="h-10 w-10 text-primary mb-3" />
-              <span className="text-white font-medium">{category.name}</span>
-            </Link>
-          ))}
-        </div>
+    <section className="py-24 bg-surface">
+      <div className="max-w-7xl mx-auto px-6">
+        <Reveal>
+          <h2 className="text-3xl font-extrabold text-ink mb-10 tracking-display">
+            Explorar por categoría
+          </h2>
+        </Reveal>
+        <Reveal delay={80}>
+          <div className="flex flex-wrap gap-x-10 gap-y-4">
+            {categories.map((category) => (
+              <Link
+                key={category.name}
+                href={category.href}
+                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink-secondary hover:text-accent transition-colors duration-150 tracking-display"
+              >
+                {category.name}
+              </Link>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
